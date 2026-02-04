@@ -1,0 +1,412 @@
+/* ===== CSS Variables ===== */
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-bg: #ffffff;
+    --card-back: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --text-color: #1f2937;
+    --text-light: #6b7280;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* ===== Reset & Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+/* ===== Game Container ===== */
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Header ===== */
+.game-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.game-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-subtitle {
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+/* ===== Game Stats ===== */
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* ===== Game Board ===== */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    perspective: 1000px;
+}
+
+/* ===== Card Styles ===== */
+.card {
+    aspect-ratio: 3/4;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card.flipped .card-inner,
+.card.matched .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card.matched {
+    pointer-events: none;
+}
+
+.card.matched .card-front {
+    animation: matchPulse 0.6s ease;
+}
+
+@keyframes matchPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.card-back {
+    background: var(--card-back);
+    color: white;
+    font-size: 3rem;
+}
+
+.card-back::before {
+    content: '?';
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-front {
+    background: var(--card-bg);
+    transform: rotateY(180deg);
+    font-size: 4rem;
+    border: 3px solid var(--primary-color);
+}
+
+/* Shake animation for wrong match */
+.card.wrong {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+/* ===== Controls ===== */
+.game-controls {
+    text-align: center;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-reset {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+}
+
+.btn-reset:hover {
+    opacity: 0.9;
+}
+
+/* ===== Modal ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h2 {
+    font-size: 2.5rem;
+    color: var(--success-color);
+    margin-bottom: 20px;
+}
+
+.modal-message {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 25px;
+}
+
+.modal-stats {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 25px;
+}
+
+.modal-stats p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: var(--text-color);
+}
+
+.modal-stats strong {
+    color: var(--primary-color);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+    color: white;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 20px;
+    }
+
+    .game-header h1 {
+        font-size: 2rem;
+    }
+
+    .game-subtitle {
+        font-size: 1rem;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .card-front,
+    .card-back {
+        font-size: 2.5rem;
+    }
+
+    .stat-item {
+        padding: 12px 20px;
+        min-width: 100px;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        padding: 30px 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .game-stats {
+        gap: 10px;
+    }
+
+    .card-front {
+        font-size: 2rem;
+    }
+
+    .card-back::before {
+        font-size: 2rem;
+    }
+}
+
+/* ===== Accessibility ===== */
+.card:focus {
+    outline: 3px solid var(--warning-color);
+    outline-offset: 2px;
+}
+
+.btn:focus {
+    outline: 3px solid var(--warning-color);
+    outline-offset: 2px;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
